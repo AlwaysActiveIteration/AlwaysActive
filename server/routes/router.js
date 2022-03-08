@@ -26,6 +26,7 @@ router.post('/events', eventController.addEvent, (req, res) => {
 router.delete('/events', eventController.deleteEvent, (req, res) => {
   res.sendStatus(200);
 });
+// TODO: switch to GET and pass via params
 // get events
 router.put('/events', eventController.getEvents, (req, res) => {
   res.status(200).json(res.locals.events);
