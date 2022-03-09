@@ -12,15 +12,32 @@ function HomePage(props) {
   const [formOpened, setForm] = useState(false);
   const [eventsArr, setEventsArr] = useState([]);
   const [eventSaved, setEventSaved] = useState(false);
-  console.log(state);
+  // console.log(state);
 
   let events = [];
 
   const getEvents = async () => {
-    const response = await fetch('/events', {method: 'PUT', body: JSON.stringify({username: state}), headers: { 'Content-Type': 'application/json' } });
-    const data = await response.json();
-    setEventsArr(data);
+    let data;
+    console.log('before', eventsArr)
+    try {
+      const response = await fetch('/events', {method: 'PUT', body: JSON.stringify({username: state}), headers: { 'Content-Type': 'application/json' } });
+      data = await response.json();
+      console.log('inside', eventsArr)
+      await setEventsArr(data);
+    } catch (error) {
+      console.log('error:', error);
+    } 
+    
+    console.log('after', eventsArr);
+    console.log('from getEvents', eventsArr)
   };
+
+  // const getEvents = async () => {
+  //   // let data;
+  //   const response = await fetch('/events', {method: 'PUT', body: JSON.stringify({username: state}), headers: { 'Content-Type': 'application/json' } });
+  //   const data = await response.json();
+  //   setEventsArr(data);
+  // };
 
   const getFilteredEvents = async (city, stateF) => {
     const response = await fetch('/filter', {
@@ -29,24 +46,28 @@ function HomePage(props) {
       headers: { 'Content-Type': 'application/json' },
     });
     const data = await response.json();
-    setEventsArr(data);
+    // setEventsArr(data);
+    console.log('from getFilteredEvents:', eventsArr);
   };
 
   const toggleRsvp = (index, status) => {
     const newArr = [...eventsArr];
     newArr[index].userstatus = status;
-    setEventsArr(newArr);
+    // setEventsArr(newArr);
+    console.log('from getFilteredEvents:', eventsArr);
   };
 
   while (counter < 1) {
     getEvents();
     counter += 1;
+    console.log('from counter')
   }
 
+  console.log('before for loop', eventsArr)
   for (let i = 0; i < eventsArr.length; i++) {
     const dateObj = new Date(eventsArr[i].time);
     events.push(<EventBox
-      key={i}
+      key={`eventBox${i}`}
       index={i}
       name={eventsArr[i].name}
       city={eventsArr[i].city}
@@ -58,17 +79,17 @@ function HomePage(props) {
       user={state}
       date={dateObj.toLocaleDateString()}
       time={dateObj.toLocaleTimeString()}
-      getEvents={getEvents}
+      // getEvents={getEvents}
       toggleRsvp={toggleRsvp}
     />);
   }
-  console.log(events);
+  // console.log(events);
 
   return (
     <div>
       <div id="ContainerParent">
-        <SideBarContainer username={state} formOpened={formOpened} setForm={setForm} getEvents={getEvents} getFilteredEvents={getFilteredEvents} />
-        <EventsContainer events={events} />
+        <SideBarContainer username={state} formOpened={formOpened} setForm={setForm} /*getEvents={getEvents}*/ getFilteredEvents={getFilteredEvents} />
+        <EventsContainer key='asf' events={events} />
       </div>
     </div>
   );
