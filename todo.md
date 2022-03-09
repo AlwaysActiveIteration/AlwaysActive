@@ -11,3 +11,12 @@ persists)
 - Expand on global error handling
 - Fix package.json not distiguishing between prod and dev mode in scripts
 - Pass back deleted or posted entities in SQL queries
+
+Research:
+- why is setstate function wrapped inside another function?: SignUpLoginPage.jsx
+  - useEffect for component did mount
+- useLocation, why? is it even being used? SignUpLoginPage.jsx - alex?
+
+REDUX:
+- username passed in via useLocation hook SignUpLoginPage.jsx // used in Homepage.jsx
+- 
