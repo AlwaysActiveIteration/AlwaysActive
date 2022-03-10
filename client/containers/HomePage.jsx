@@ -16,8 +16,10 @@ function HomePage(props) {
 
   let events = [];
 
+  // INITIAL CALL TO DATABASE TO "GET" Returns only rsvp'd events
   const getEvents = async () => {
-    const response = await fetch('/events', {method: 'PUT', body: JSON.stringify({username: state}), headers: { 'Content-Type': 'application/json' } });
+    // TODO: make this a GET
+    const response = await fetch('/events', { method: 'PUT', body: JSON.stringify({ username: state }), headers: { 'Content-Type': 'application/json' } });
     const data = await response.json();
     setEventsArr(data);
   };

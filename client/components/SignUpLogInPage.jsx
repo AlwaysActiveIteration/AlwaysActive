@@ -14,6 +14,7 @@ function SignUpLogInPage(props) {
   const [logInPassword, setLogInPassword] = useState('');
   const [isSignedIn, setIsSignedIn] = useState(false);
 
+  // username
   const { state } = useLocation();
 
   const navigate = useNavigate();

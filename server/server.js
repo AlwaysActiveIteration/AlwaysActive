@@ -11,7 +11,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // TODO: figure out what's going on here
-// This is because of package/json never setting the variable to dev
 if (process.env.NODE_ENV === 'production') {
   app.use('/', express.static(path.join(__dirname, '../build')));
 
