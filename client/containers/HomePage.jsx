@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { render } from 'react-dom';
 import SideBarContainer from './SideBarContainer';
 import EventsContainer from './EventsContainer';
@@ -10,27 +10,27 @@ let counter = 0;
 function HomePage(props) {
   const { state } = useLocation();
   const [formOpened, setForm] = useState(false);
-  const [eventsArr, setEventsArr] = useState([]);
+  const [eventsArr, setEventsArr] = useState([1,2]);
   const [eventSaved, setEventSaved] = useState(false);
   // console.log(state);
 
-  let events = [];
+  
 
   const getEvents = async () => {
-    let data;
+    let data = [];
     console.log('before', eventsArr)
     try {
       const response = await fetch('/events', {method: 'PUT', body: JSON.stringify({username: state}), headers: { 'Content-Type': 'application/json' } });
       data = await response.json();
-      console.log('inside', eventsArr)
       await setEventsArr(data);
+      console.log('inside', eventsArr);
     } catch (error) {
       console.log('error:', error);
-    } 
-    
+    }
     console.log('after', eventsArr);
     console.log('from getEvents', eventsArr)
   };
+ 
 
   // const getEvents = async () => {
   //   // let data;
@@ -46,25 +46,48 @@ function HomePage(props) {
       headers: { 'Content-Type': 'application/json' },
     });
     const data = await response.json();
-    // setEventsArr(data);
+    setEventsArr(data);
     console.log('from getFilteredEvents:', eventsArr);
   };
 
   const toggleRsvp = (index, status) => {
     const newArr = [...eventsArr];
     newArr[index].userstatus = status;
-    // setEventsArr(newArr);
+    setEventsArr(newArr);
     console.log('from getFilteredEvents:', eventsArr);
   };
+
+  console.log('initialize events')
+  let events = [];
+
+  // let events = [<EventBox
+  //   key="eventBox20"
+  //   index={20}
+  //   name="Bob"
+  //   city="Test"
+  //   state="Test1"
+  //   description="Test2"
+  //   owner="Test3"
+  //   eventId={20}
+  //   rsvpStatus="Test4"
+  //   user="Test5"
+  //   date={20}
+  //   time={20}
+  //   // getEvents={getEvents}
+  //   toggleRsvp={toggleRsvp}
+  // />];
 
   while (counter < 1) {
     getEvents();
     counter += 1;
-    console.log('from counter')
+    console.log('inside while loop', eventsArr);
   }
+
+  // useEffect(async () => await getEvents(), []);
 
   console.log('before for loop', eventsArr)
   for (let i = 0; i < eventsArr.length; i++) {
+    console.log('inside for loop', eventsArr);
     const dateObj = new Date(eventsArr[i].time);
     events.push(<EventBox
       key={`eventBox${i}`}
@@ -83,12 +106,11 @@ function HomePage(props) {
       toggleRsvp={toggleRsvp}
     />);
   }
-  // console.log(events);
 
   return (
     <div>
       <div id="ContainerParent">
-        <SideBarContainer username={state} formOpened={formOpened} setForm={setForm} /*getEvents={getEvents}*/ getFilteredEvents={getFilteredEvents} />
+        {/* <SideBarContainer username={state} formOpened={formOpened} setForm={setForm} getEvents={getEvents} getFilteredEvents={getFilteredEvents} /> */}
         <EventsContainer key='asf' events={events} />
       </div>
     </div>
